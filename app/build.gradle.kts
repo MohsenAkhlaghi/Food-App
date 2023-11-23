@@ -5,6 +5,7 @@ plugins {
     id("androidx.navigation.safeargs.kotlin")
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -67,6 +68,7 @@ dependencies {
     implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
     //Coroutine core
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.3")
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
     //Easy permission
     implementation("pub.devrel:easypermissions:3.0.0")
     //Rounded Image view
@@ -88,5 +90,13 @@ dependencies {
     implementation("com.github.bumptech.glide:glide:4.15.1")
     //Worker
     implementation("androidx.work:work-runtime-ktx:2.8.1")
+    // Image Loading library Coil
+    implementation ("io.coil-kt:coil:2.2.2")
+    // Shimmer
+    implementation ("com.facebook.shimmer:shimmer:0.5.0")
+    // Jsoup
+    implementation ("org.jsoup:jsoup:1.14.3")
+    // DataStore
+    implementation ("androidx.datastore:datastore-preferences:1.0.0")
 
 }
