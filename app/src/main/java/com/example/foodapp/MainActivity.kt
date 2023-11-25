@@ -16,37 +16,32 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
-    private lateinit var bottomNavigationView: BottomNavigationView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setBottomNavigation()
 
-        //Crash the app
-/*        val navController = findNavController(R.id.fragmentContainerView)
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-            R.id.recipesFragment,
-            R.id.favoriteRecipesFragment,
-            R.id.foodJokeFragment
-            )
-        )
-        binding.bottomNavigationView.setupWithNavController(navController)
-        setupActionBarWithNavController(navController,appBarConfiguration)*/
-
     }
 
-    //Crash the app
-/*    override fun onSupportNavigateUp(): Boolean {
+    override fun onSupportNavigateUp(): Boolean {
         return navController.navigateUp() || super.onSupportNavigateUp()
-    }*/
+    }
 
     private fun setBottomNavigation() {
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
         navController = navHostFragment.navController
-        bottomNavigationView = binding.bottomNavigationView
-        NavigationUI.setupWithNavController(bottomNavigationView, navController)
+        //اسم فرگمنت هارو در اکشن بار می نویسه
+        val appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.recipesFragment,
+                R.id.favoriteRecipesFragment,
+                R.id.foodJokeFragment
+            )
+        )
+        binding.bottomNavigationView.setupWithNavController(navController)
+        //اسم فرگمنت هارو در اکشن بار می نویسه
+        setupActionBarWithNavController(navController,appBarConfiguration)
     }
 
 }
