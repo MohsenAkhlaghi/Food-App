@@ -93,8 +93,8 @@ dependencies {
     // Image Loading library Coil
     implementation ("io.coil-kt:coil:2.2.2")
     // Shimmer
-    implementation ("com.facebook.shimmer:shimmer:0.5.0")
-    implementation("com.todkars:shimmer-recyclerview:0.4.1")
+//    implementation ("com.facebook.shimmer:shimmer:0.5.0")
+//    implementation("com.todkars:shimmer-recyclerview:0.4.1")
     // Jsoup
     implementation ("org.jsoup:jsoup:1.14.3")
     // DataStore
