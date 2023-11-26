@@ -10,10 +10,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.foodapp.domain.repository.Repository
 import com.example.foodapp.models.dto.FoodRecipe
 import com.example.foodapp.util.NetworkResult
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import retrofit2.Response
 import javax.inject.Inject
 
+@HiltViewModel
 class MainViewModel @Inject constructor(private val repository: Repository,application: Application) : AndroidViewModel(application) {
 
     var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
