@@ -5,6 +5,9 @@
 
     <data>
 
+        <variable
+            name="result"
+            type="com.example.foodapp.models.dto.Result" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -37,6 +40,7 @@
                     android:layout_width="200dp"
                     android:layout_height="0dp"
                     android:scaleType="centerCrop"
+                    loadImageUrl="@{result.image}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
@@ -52,7 +56,7 @@
                     android:ellipsize="end"
                     android:fontFamily="@font/courgette"
                     android:maxLines="2"
-                    android:text="Lorem Ipsum"
+                    android:text="@{result.title}"
                     android:textColor="@color/darker"
                     android:textSize="20sp"
                     android:textStyle="bold"
@@ -68,7 +72,7 @@
                     android:layout_marginTop="12dp"
                     android:ellipsize="end"
                     android:maxLines="3"
-                    android:text="@string/lorem_ipsum"
+                    android:text="@{result.summary}"
                     android:textColor="@color/dark_gray"
                     app:layout_constraintEnd_toEndOf="@+id/title_textView"
                     app:layout_constraintStart_toStartOf="@+id/title_textView"
@@ -94,6 +98,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="100"
+                    setNumberOfMinutes="@{result.aggregateLikes}"
                     android:textAlignment="center"
                     android:textColor="@color/red"
                     app:layout_constraintStart_toStartOf="@+id/description_textView"
@@ -115,6 +120,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:text="100"
+                    setNumberOfLikes="@{result.aggregateLikes}"
                     android:textAlignment="center"
                     android:textColor="@color/yellow"
                     app:layout_constraintStart_toEndOf="@+id/heart_textView"
@@ -124,6 +130,7 @@
                     android:id="@+id/leaf_imageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    applyVeganColor="@{result.vegan}"
                     app:layout_constraintEnd_toEndOf="@+id/leaf_textView"
                     app:layout_constraintStart_toStartOf="@+id/leaf_textView"
                     app:layout_constraintTop_toTopOf="@+id/clock_imageView"
@@ -134,7 +141,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
-                    android:text="100"
+                    applyVeganColor="@{result.vegan}"
+                    android:text="@string/vegan"
                     android:textAlignment="center"
                     app:layout_constraintStart_toEndOf="@+id/clock_textView"
                     app:layout_constraintTop_toBottomOf="@+id/leaf_imageView" />
