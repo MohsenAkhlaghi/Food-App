@@ -12,29 +12,34 @@ import com.example.foodapp.R
 import com.example.foodapp.databinding.FragmentRecipesBinding
 import com.example.foodapp.ui.MainViewModel
 import com.example.foodapp.ui.adapter.RecipesAdapter
-import com.example.foodapp.util.Constants.API_KEY
 import com.example.foodapp.util.NetworkResult
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class RecipesFragment : Fragment(R.layout.fragment_recipes) {
     private lateinit var binding: FragmentRecipesBinding
-    private lateinit var viewModel: MainViewModel
+    private lateinit var viewModelMain: MainViewModel
+    private lateinit var viewModelRecipes: RecipesViewModel
     private val mAdapter by lazy { RecipesAdapter() }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        viewModelMain = ViewModelProvider(requireActivity())[MainViewModel::class.java]
+        viewModelRecipes = ViewModelProvider(requireActivity())[RecipesViewModel::class.java]
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = DataBindingUtil.bind(view)!!
         binding.lifecycleOwner = viewLifecycleOwner
 
-        viewModel = ViewModelProvider(requireActivity())[MainViewModel::class.java]
         setupRecyclerView()
         requestApiData()
     }
 
     private fun requestApiData() {
-        viewModel.getRecipes(applyQueries())
-        viewModel.recipesResponse.observe(viewLifecycleOwner) { response ->
+        viewModelMain.getRecipes(viewModelRecipes.applyQueries())
+        viewModelMain.recipesResponse.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is NetworkResult.Success -> {
 //                    hideShimmerEffect()
@@ -46,7 +51,6 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
 //                    hideShimmerEffect()
                     hideProgress()
                     Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_SHORT).show()
-                    Log.e("TAG", "requestApiData: ${response.message}")
                 }
 
                 is NetworkResult.Loading -> {
@@ -57,7 +61,7 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
         }
     }
 
-    private fun applyQueries(): HashMap<String, String> {
+    /*private fun applyQueries(): HashMap<String, String> {
         val queries: HashMap<String, String> = HashMap()
         //تعداد کوئری و نتایجی که می خوایم برگردونیم
         queries["number"] = "50"
@@ -67,7 +71,7 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
         queries["addRecipeInformation"] = "true"
         queries["fillIngredients"] = "true"
         return queries
-    }
+    }*/
 
     private fun setupRecyclerView() {
         binding.recyclerview.adapter = mAdapter
