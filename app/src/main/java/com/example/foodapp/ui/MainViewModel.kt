@@ -5,8 +5,11 @@ import android.content.Context
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.foodapp.data.local.RecipesEntity
 import com.example.foodapp.domain.repository.Repository
 import com.example.foodapp.models.dto.FoodRecipe
 import com.example.foodapp.util.NetworkResult
@@ -18,6 +21,13 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(private val repository: Repository, application: Application) : AndroidViewModel(application) {
 
+    /** ROOM DATABASE */
+    var readRecipes: LiveData<List<RecipesEntity>> = repository.localDataSource.readDatabase().asLiveData()
+    private fun insertRecipes(recipesEntity: RecipesEntity) = viewModelScope.launch {
+        repository.localDataSource.insertRecipes(recipesEntity)
+    }
+
+    /** RETROFIT */
     var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
 
     /**
@@ -37,12 +47,27 @@ class MainViewModel @Inject constructor(private val repository: Repository, appl
             try {
                 val response = repository.remoteDataSource.getRecipes(queries)
                 recipesResponse.value = handleFoodRecipesResponse(response)
+
+                //
+                val foodRecipes = recipesResponse.value!!.data
+                if (foodRecipes != null) {
+                    offlineCacheRecipes(foodRecipes)
+                }
+
             } catch (e: Exception) {
                 recipesResponse.value = NetworkResult.Error("Recipes not found.")
             }
         } else {
             recipesResponse.value = NetworkResult.Error("No Internet Connection.")
         }
+    }
+
+    /**
+     *
+     */
+    private fun offlineCacheRecipes(foodRecipes: FoodRecipe) {
+        val recipesEntity = RecipesEntity(foodRecipes)
+        insertRecipes(recipesEntity)
     }
 
     /**
@@ -59,7 +84,7 @@ class MainViewModel @Inject constructor(private val repository: Repository, appl
                 return NetworkResult.Error("API Key Limited.")
             }
             //اگر پاسخمون از api بدنش (body) خالی یا نال بود، ارور NetworkResult مون رو دستورالعمل (Recipes) درخواستی یافت نشد
-            response.body()!!.results.isNullOrEmpty() -> {
+            response.body()!!.results.isEmpty() -> {
                 return NetworkResult.Error("Recipes not found.")
             }
             //اگر پاسخمون از api موفقیت آمیز بود، بدنه پاسخ را در NetworkResult.Success قرار بده
