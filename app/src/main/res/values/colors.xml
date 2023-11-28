@@ -16,4 +16,11 @@
     <color name="yellow">#FFC114</color>
     <color name="green">#00C980</color>
     <color name="blue">#0000CC</color>
+
+    <!--  Bottom Sheet (Chip Style)  -->
+    <color name="checkedChipBackgroundColor">#206200EA</color>
+    <color name="chipBackgroundColor">@color/light_gray</color>
+    <color name="checkedChipTextColor">@color/color_primary</color>
+    <color name="chipTextColor">@color/dark_gray</color>
+
 </resources>
