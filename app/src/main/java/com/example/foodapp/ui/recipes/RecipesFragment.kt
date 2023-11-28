@@ -21,6 +21,7 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
     private lateinit var viewModelMain: MainViewModel
     private lateinit var viewModelRecipes: RecipesViewModel
     private val mAdapter by lazy { RecipesAdapter() }
+    private val args by navArgs<RecipesFragmentArgs>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
