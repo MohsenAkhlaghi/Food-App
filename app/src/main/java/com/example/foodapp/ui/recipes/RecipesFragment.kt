@@ -1,5 +1,6 @@
-package com.example.foodapp.ui.resipes
+package com.example.foodapp.ui.recipes
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -7,13 +8,18 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.foodapp.R
 import com.example.foodapp.databinding.FragmentRecipesBinding
 import com.example.foodapp.ui.MainViewModel
 import com.example.foodapp.ui.adapter.RecipesAdapter
 import com.example.foodapp.util.NetworkResult
+import com.example.foodapp.util.observeOnce
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class RecipesFragment : Fragment(R.layout.fragment_recipes) {
@@ -33,12 +39,33 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
         super.onViewCreated(view, savedInstanceState)
         binding = DataBindingUtil.bind(view)!!
         binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModel = viewModelMain
 
         setupRecyclerView()
-        requestApiData()
+        readDatabase()
+
+        binding.recipesFab.setOnClickListener {
+            findNavController().navigate(R.id.action_recipesFragment_to_recipesBottomSheet)
+        }
+
+    }
+
+    private fun readDatabase() {
+        lifecycleScope.launch {
+            viewModelMain.readRecipes.observeOnce(viewLifecycleOwner) { database ->
+                if (database.isNotEmpty() && !args.backFromBottomSheet) {
+                    mAdapter.setData(database[0].foodRecipe)
+                    hideProgress()
+                } else {
+                    requestApiData()
+                }
+            }
+        }
+
     }
 
     private fun requestApiData() {
+        Log.e(TAG, "requestApiData: ")
         viewModelMain.getRecipes(viewModelRecipes.applyQueries())
         viewModelMain.recipesResponse.observe(viewLifecycleOwner) { response ->
             when (response) {
@@ -51,6 +78,7 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
                 is NetworkResult.Error -> {
 //                    hideShimmerEffect()
                     hideProgress()
+                    localDataFromCache()
                     Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_SHORT).show()
                 }
 
@@ -62,17 +90,15 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
         }
     }
 
-    /*private fun applyQueries(): HashMap<String, String> {
-        val queries: HashMap<String, String> = HashMap()
-        //تعداد کوئری و نتایجی که می خوایم برگردونیم
-        queries["number"] = "50"
-        queries["apiKey"] = API_KEY
-        queries["type"] = "snack"
-        queries["diet"] = "vegan"
-        queries["addRecipeInformation"] = "true"
-        queries["fillIngredients"] = "true"
-        return queries
-    }*/
+    private fun localDataFromCache() {
+        lifecycleScope.launch {
+            viewModelMain.readRecipes.observe(viewLifecycleOwner) { database ->
+                if (database.isNullOrEmpty()) {
+                    mAdapter.setData(database[0].foodRecipe)
+                }
+            }
+        }
+    }
 
     private fun setupRecyclerView() {
         binding.recyclerview.adapter = mAdapter
