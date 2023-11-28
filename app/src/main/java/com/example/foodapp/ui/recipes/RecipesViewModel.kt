@@ -1,7 +1,6 @@
 package com.example.foodapp.ui.recipes
 
 import android.app.Application
-import androidx.datastore.dataStore
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.foodapp.data.DataStoreRepository
@@ -16,7 +15,6 @@ import com.example.foodapp.util.Constants.QUERY_NUMBER
 import com.example.foodapp.util.Constants.QUERY_TYPE
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -42,7 +40,7 @@ class RecipesViewModel @Inject constructor(
         val queries: HashMap<String, String> = HashMap()
 
         viewModelScope.launch {
-            readMealAndDietType.collect{value ->
+            readMealAndDietType.collect { value ->
                 mealType = value.selectedMealType
                 dietType = value.selectedDietType
             }
