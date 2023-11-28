@@ -14,5 +14,12 @@
         <item name="colorAccent">@color/color_accent</item>
     </style>
 
+    <!-- Bottom Sheet (Chip Style) -->
+    <style name="CustomChipStyle" parent="Widget.MaterialComponents.Chip.Filter">
+        <item name="chipBackgroundColor">@color/chipBackgroundColor</item>
+        <item name="android:textColor">@color/chipTextColor</item>
+        <item name="checkedIconTint">@color/chipTextColor</item>
+    </style>
+
     <style name="Theme.FoodApp" parent="Base.Theme.FoodApp" />
 </resources>
