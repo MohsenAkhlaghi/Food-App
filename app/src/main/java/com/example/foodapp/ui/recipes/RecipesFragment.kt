@@ -28,7 +28,7 @@ import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class RecipesFragment : Fragment(R.layout.fragment_recipes), SearchView.OnQueryTextListener, View.OnFocusChangeListener {
+class RecipesFragment : Fragment(R.layout.fragment_recipes), SearchView.OnQueryTextListener {
     private lateinit var binding: FragmentRecipesBinding
     private lateinit var viewModelMain: MainViewModel
     private lateinit var viewModelRecipes: RecipesViewModel
@@ -86,7 +86,7 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes), SearchView.OnQueryT
         val search = menu.findItem(R.id.menu_search)
         val searchView = search.actionView as? SearchView
         searchView?.isSubmitButtonEnabled = true
-        searchView?.setOnQueryTextFocusChangeListener(this)
+        searchView?.setOnQueryTextListener(this)
     }
 
     override fun onQueryTextSubmit(p0: String?): Boolean {
@@ -95,10 +95,6 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes), SearchView.OnQueryT
 
     override fun onQueryTextChange(p0: String?): Boolean {
         return true
-    }
-
-    override fun onFocusChange(p0: View?, p1: Boolean) {
-        TODO("Not yet implemented")
     }
 
     private fun readDatabase() {
