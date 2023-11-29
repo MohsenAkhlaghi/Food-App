@@ -3,7 +3,10 @@ package com.example.foodapp.ui.recipes
 import android.content.ContentValues.TAG
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -25,7 +28,7 @@ import kotlinx.coroutines.launch
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
-class RecipesFragment : Fragment(R.layout.fragment_recipes) {
+class RecipesFragment : Fragment(R.layout.fragment_recipes), SearchView.OnQueryTextListener, View.OnFocusChangeListener {
     private lateinit var binding: FragmentRecipesBinding
     private lateinit var viewModelMain: MainViewModel
     private lateinit var viewModelRecipes: RecipesViewModel
@@ -47,6 +50,7 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModelMain
 
+        setHasOptionsMenu(true)
         setupRecyclerView()
         //NETWORK LISTENER (15)
         viewModelRecipes.readBackOnline.observe(viewLifecycleOwner) {
@@ -75,7 +79,26 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
                 viewModelRecipes.showNetworkStatus()
             }
         }
+    }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.recipes_menu, menu)
+        val search = menu.findItem(R.id.menu_search)
+        val searchView = search.actionView as? SearchView
+        searchView?.isSubmitButtonEnabled = true
+        searchView?.setOnQueryTextFocusChangeListener(this)
+    }
+
+    override fun onQueryTextSubmit(p0: String?): Boolean {
+        return true
+    }
+
+    override fun onQueryTextChange(p0: String?): Boolean {
+        return true
+    }
+
+    override fun onFocusChange(p0: View?, p1: Boolean) {
+        TODO("Not yet implemented")
     }
 
     private fun readDatabase() {
@@ -89,7 +112,6 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
                 }
             }
         }
-
     }
 
     private fun requestApiData() {
@@ -106,7 +128,7 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
                 is NetworkResult.Error -> {
 //                    hideShimmerEffect()
                     hideProgress()
-                    localDataFromCache()
+                    loadDataFromCache()
                     Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_SHORT).show()
                 }
 
@@ -118,7 +140,10 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes) {
         }
     }
 
-    private fun localDataFromCache() {
+    /**
+     * اطلاعات رو از کش می گیره
+     */
+    private fun loadDataFromCache() {
         lifecycleScope.launch {
             viewModelMain.readRecipes.observe(viewLifecycleOwner) { database ->
                 if (database.isNullOrEmpty()) {
