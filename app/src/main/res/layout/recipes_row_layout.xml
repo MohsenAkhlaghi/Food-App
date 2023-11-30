@@ -14,6 +14,7 @@
         android:id="@+id/recipesRowLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        onRecipesClickListener="@{result}"
         android:layout_marginTop="4dp"
         android:layout_marginBottom="4dp">
 
