@@ -136,6 +136,31 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes), SearchView.OnQueryT
         }
     }
 
+    private fun searchApiData(searchQuery: String) {
+        showProgress()
+        viewModelMain.searchRecipes(viewModelRecipes.applySearchQuery(searchQuery))
+        viewModelMain.searchRecipesResponse.observe(viewLifecycleOwner) { response ->
+            when (response) {
+                is NetworkResult.Error -> {
+                    hideProgress()
+                    loadDataFromCache()
+                    Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_SHORT).show()
+                }
+
+                is NetworkResult.Loading -> {
+                    showProgress()
+                }
+
+                is NetworkResult.Success -> {
+                    hideProgress()
+                    val foodRecipes = response.data
+                    foodRecipes?.let { mAdapter.setData(it) }
+
+                }
+            }
+        }
+    }
+
     /**
      * اطلاعات رو از کش می گیره
      */
