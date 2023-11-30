@@ -1,10 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-<!--    <style name="Base.Theme.FoodApp" parent="Theme.Material3.DayNight.NoActionBar">-->
-<!--        &lt;!&ndash; Customize your light theme here. &ndash;&gt;-->
-<!--        &lt;!&ndash; <item name="colorPrimary">@color/my_light_primary</item> &ndash;&gt;-->
-<!--    </style>-->
-
+    <!--    <style name="Base.Theme.FoodApp" parent="Theme.Material3.DayNight.NoActionBar">-->
+    <!--        &lt;!&ndash; Customize your light theme here. &ndash;&gt;-->
+    <!--        &lt;!&ndash; <item name="colorPrimary">@color/my_light_primary</item> &ndash;&gt;-->
+    <!--    </style>-->
 
     <!--  NEW THEME :)  -->
     <style name="Base.Theme.FoodApp" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
@@ -19,6 +18,27 @@
         <item name="chipBackgroundColor">@color/chipBackgroundColor</item>
         <item name="android:textColor">@color/chipTextColor</item>
         <item name="checkedIconTint">@color/chipTextColor</item>
+    </style>
+
+    <!--Details Activity-->
+    <style name="DetailsActivityStyle" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="colorPrimary">@color/color_primary</item>
+        <item name="colorPrimaryDark">@color/color_primary_dark</item>
+        <item name="colorAccent">@color/color_accent</item>
+        <item name="colorControlNormal">@color/white</item>
+        <item name="android:statusBarColor">@color/color_primary_dark</item>
+
+    </style>
+
+    <style name="CustomTabLayoutStyle" parent="Widget.Design.TabLayout">
+        <item name="background">@color/actionBarBackgroundColor</item>
+        <item name="tabIndicatorColor">@color/white</item>
+        <item name="tabIndicatorHeight">2dp</item>
+        <item name="tabSelectedTextColor">@color/white</item>
+    </style>
+
+    <style name="CustomTabTextStyle" parent="TextAppearance.Design.Tab">
+        <item name="android:textColor">@color/white</item>
     </style>
 
     <style name="Theme.FoodApp" parent="Base.Theme.FoodApp" />
