@@ -33,36 +33,23 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
                 summaryTextView.text = summary
             }
 
-            if (myBundle?.vegetarian == true) {
-                setGreenColor(vegetarianImageView, vegetarianTextView, requireContext())
-            }
-
-            if (myBundle?.vegan == true) {
-                setGreenColor(veganImageView, veganTextView, requireContext())
-            }
-
-            if (myBundle?.glutenFree == true) {
-                setGreenColor(glutenFreeImageView, glutenFreeTextView, requireContext())
-            }
-
-            if (myBundle?.dairyFree == true) {
-                setGreenColor(dairyFreeImageView, dairyFreeTextView, requireContext())
-            }
-
-            if (myBundle?.veryHealthy == true) {
-                setGreenColor(healthyImageView, healthyTextView, requireContext())
-            }
-
-            if (myBundle?.cheap == true) {
-                setGreenColor(cheapImageView, cheapTextView, requireContext())
+            myBundle?.let {
+                if (it.vegetarian) setGreenColor(vegetarianImageView, vegetarianTextView)
+                if (it.vegan) setGreenColor(veganImageView, veganTextView)
+                if (it.glutenFree) setGreenColor(glutenFreeImageView, glutenFreeTextView)
+                if (it.dairyFree) setGreenColor(dairyFreeImageView, dairyFreeTextView)
+                if (it.veryHealthy) setGreenColor(healthyImageView, healthyTextView)
+                if (it.cheap) setGreenColor(cheapImageView, cheapTextView)
             }
 
         }
 
     }
+
+    private fun setGreenColor(imageView: ImageView, textView: TextView) {
+        imageView.setColorFilter(ContextCompat.getColor(requireContext(), R.color.green))
+        textView.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+    }
+
 }
 
-fun setGreenColor(imageView: ImageView, textView: TextView, context: Context) {
-    imageView.setColorFilter(ContextCompat.getColor(context, R.color.green))
-    textView.setTextColor(ContextCompat.getColor(context, R.color.green))
-}
