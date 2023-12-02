@@ -9,6 +9,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.foodapp.data.local.FavoriteEntity
 import com.example.foodapp.data.local.RecipesEntity
 import com.example.foodapp.domain.repository.Repository
 import com.example.foodapp.models.dto.FoodRecipe
@@ -22,10 +23,24 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(private val repository: Repository, application: Application) : AndroidViewModel(application) {
 
     /** ROOM DATABASE */
-    var readRecipes: LiveData<List<RecipesEntity>> = repository.localDataSource.readDatabase().asLiveData()
+    var readRecipes: LiveData<List<RecipesEntity>> = repository.localDataSource.readRecipes().asLiveData()
+    var readFavoriteRecipes: LiveData<List<FavoriteEntity>> = repository.localDataSource.readFavoriteRecipes().asLiveData()
     private fun insertRecipes(recipesEntity: RecipesEntity) = viewModelScope.launch {
         repository.localDataSource.insertRecipes(recipesEntity)
     }
+
+    private fun insertFavoriteRecipes(favoriteEntity: FavoriteEntity) = viewModelScope.launch {
+        repository.localDataSource.insertFavoriteRecipes(favoriteEntity)
+    }
+
+    private fun deleteFavoriteRecipe(favoriteEntity: FavoriteEntity) = viewModelScope.launch {
+        repository.localDataSource.deleteFavoriteRecipe(favoriteEntity)
+    }
+
+    private fun deleteAllFavoriteRecipes() = viewModelScope.launch {
+        repository.localDataSource.deleteAllFavoriteRecipes()
+    }
+
 
     /** RETROFIT */
     var recipesResponse: MutableLiveData<NetworkResult<FoodRecipe>> = MutableLiveData()
@@ -83,7 +98,7 @@ class MainViewModel @Inject constructor(private val repository: Repository, appl
     }
 
     /**
-     *
+     * هر چیزی که از api میاد رو ذخیره میکنه در دیتابیس که در صورت آفلاین بودن برنامه یه دیتایی به ما نمایش بده
      */
     private fun offlineCacheRecipes(foodRecipes: FoodRecipe) {
         val recipesEntity = RecipesEntity(foodRecipes)
