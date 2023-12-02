@@ -1,6 +1,5 @@
 package com.example.foodapp.ui.overview
 
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
@@ -12,6 +11,7 @@ import coil.load
 import com.example.foodapp.R
 import com.example.foodapp.databinding.FragmentOverviewBinding
 import com.example.foodapp.models.dto.Result
+import com.example.foodapp.util.Constants.RECIPE_RESULT_KEY
 import dagger.hilt.android.AndroidEntryPoint
 import org.jsoup.Jsoup
 
@@ -23,7 +23,7 @@ class OverviewFragment : Fragment(R.layout.fragment_overview) {
         binding = DataBindingUtil.bind(view)!!
         binding.apply {
             val args = arguments
-            val myBundle: Result? = args?.getParcelable("recipeBundle")
+            val myBundle: Result? = args?.getParcelable(RECIPE_RESULT_KEY)
             mainImageView.load(myBundle?.image)
             titleTextView.text = myBundle?.title
             likesTextView.text = myBundle?.aggregateLikes.toString()

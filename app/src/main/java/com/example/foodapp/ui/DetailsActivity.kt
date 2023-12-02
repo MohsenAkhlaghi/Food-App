@@ -14,6 +14,7 @@ import com.example.foodapp.ui.adapter.PagerAdapter
 import com.example.foodapp.ui.ingredients.IngredientsFragment
 import com.example.foodapp.ui.instructions.InstructionsFragment
 import com.example.foodapp.ui.overview.OverviewFragment
+import com.example.foodapp.util.Constants.RECIPE_RESULT_KEY
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,7 +41,7 @@ class DetailsActivity : AppCompatActivity() {
         title.add("Instructions")
 
         val resultBundle = Bundle()
-        resultBundle.putParcelable("recipeBundle", args.result)
+        resultBundle.putParcelable(RECIPE_RESULT_KEY, args.result)
 
         val adapter = PagerAdapter(resultBundle, fragments, title, supportFragmentManager)
 
