@@ -25,19 +25,19 @@ class MainViewModel @Inject constructor(private val repository: Repository, appl
     /** ROOM DATABASE */
     var readRecipes: LiveData<List<RecipesEntity>> = repository.localDataSource.readRecipes().asLiveData()
     var readFavoriteRecipes: LiveData<List<FavoriteEntity>> = repository.localDataSource.readFavoriteRecipes().asLiveData()
-    private fun insertRecipes(recipesEntity: RecipesEntity) = viewModelScope.launch {
+    fun insertRecipes(recipesEntity: RecipesEntity) = viewModelScope.launch {
         repository.localDataSource.insertRecipes(recipesEntity)
     }
 
-    private fun insertFavoriteRecipes(favoriteEntity: FavoriteEntity) = viewModelScope.launch {
+    fun insertFavoriteRecipes(favoriteEntity: FavoriteEntity) = viewModelScope.launch {
         repository.localDataSource.insertFavoriteRecipes(favoriteEntity)
     }
 
-    private fun deleteFavoriteRecipe(favoriteEntity: FavoriteEntity) = viewModelScope.launch {
+    fun deleteFavoriteRecipe(favoriteEntity: FavoriteEntity) = viewModelScope.launch {
         repository.localDataSource.deleteFavoriteRecipe(favoriteEntity)
     }
 
-    private fun deleteAllFavoriteRecipes() = viewModelScope.launch {
+    fun deleteAllFavoriteRecipes() = viewModelScope.launch {
         repository.localDataSource.deleteAllFavoriteRecipes()
     }
 
