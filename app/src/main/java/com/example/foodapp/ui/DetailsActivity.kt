@@ -1,6 +1,9 @@
 package com.example.foodapp.ui
 
+import android.content.ContentValues.TAG
 import android.os.Bundle
+import android.util.Log
+import android.view.Menu
 import android.view.MenuItem
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -10,12 +13,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.navArgs
 import com.example.foodapp.R
+import com.example.foodapp.data.local.FavoriteEntity
 import com.example.foodapp.databinding.ActivityDetailsBinding
 import com.example.foodapp.ui.adapter.PagerAdapter
 import com.example.foodapp.ui.ingredients.IngredientsFragment
 import com.example.foodapp.ui.instructions.InstructionsFragment
 import com.example.foodapp.ui.overview.OverviewFragment
 import com.example.foodapp.util.Constants.RECIPE_RESULT_KEY
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -63,6 +68,10 @@ class DetailsActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             finish()
+        } else if (item.itemId == R.id.save_to_favorites_menu) {
+            saveToFavorite(item)
+        } else if (item.itemId == R.id.save_to_favorites_menu && recipeSaved) {
+            removeFromFavorite(item)
         }
         return super.onOptionsItemSelected(item)
     }
