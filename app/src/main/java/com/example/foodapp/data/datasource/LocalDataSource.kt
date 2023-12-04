@@ -1,8 +1,10 @@
 package com.example.foodapp.data.datasource
 
 import com.example.foodapp.data.local.FavoriteEntity
+import com.example.foodapp.data.local.FoodJokeEntity
 import com.example.foodapp.data.local.RecipesDao
 import com.example.foodapp.data.local.RecipesEntity
+import com.example.foodapp.models.dto.FoodJoke
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -22,6 +24,13 @@ class LocalDataSource @Inject constructor(private val recipesDao: RecipesDao) {
         return recipesDao.insertFavoriteRecipes(favoriteEntity)
     }
 
+    /**
+     * ذخیره و وارد کردن جُک در دیتابیس
+     */
+    suspend fun insertFoodJoke(foodJokeEntity: FoodJokeEntity) {
+        return recipesDao.insertFoodJoke(foodJokeEntity)
+    }
+
 
     /**
      * صدا کردن و خواندن موادغذایی از دیتابیس
@@ -35,6 +44,13 @@ class LocalDataSource @Inject constructor(private val recipesDao: RecipesDao) {
      */
     fun readFavoriteRecipes(): Flow<List<FavoriteEntity>> {
         return recipesDao.readFavoriteRecipes()
+    }
+
+    /**
+     * صدا کردن و خواندن جُک از دیتابیس
+     */
+    fun readFoodJoke(): Flow<List<FoodJoke>> {
+        return recipesDao.readFoodJoke()
     }
 
     /**
