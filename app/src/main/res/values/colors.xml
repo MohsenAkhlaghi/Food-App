@@ -28,4 +28,7 @@
     <color name="cardBackgroundColor">@color/white</color>
     <color name="titleColor">@color/darker</color>
 
+    <color name="status_bar_color">@color/colorPrimaryDark</color>
+    <color name="contextual_status_bar_color">@color/darker</color>
+
 </resources>
