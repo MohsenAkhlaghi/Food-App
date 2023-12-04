@@ -5,6 +5,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import com.example.foodapp.models.dto.FoodJoke
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -23,6 +24,12 @@ interface RecipesDao {
     suspend fun insertFavoriteRecipes(favoriteEntity: FavoriteEntity)
 
     /**
+     * ذخیره و وارد کردن جُک در دیتابیس
+     */
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertFoodJoke(foodJokeEntity: FoodJokeEntity)
+
+    /**
      * صدا کردن و خواندن موادغذایی از دیتابیس
      */
     @Query("SELECT * FROM recipes_table ORDER BY id ASC")
@@ -34,6 +41,12 @@ interface RecipesDao {
      */
     @Query("SELECT * FROM favorite_recipes_table ORDER BY id ASC")
     fun readFavoriteRecipes(): Flow<List<FavoriteEntity>>
+
+    /**
+     * صدا کردن و خواندن جُک از دیتابیس
+     */
+    @Query("SELECT * FROM food_joke_table ORDER BY id ASC")
+    fun readFoodJoke(): Flow<List<FoodJoke>>
 
     /**
      * حذف یک موادغذایی مورد علاقه از دیتابیس
