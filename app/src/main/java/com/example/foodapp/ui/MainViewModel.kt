@@ -10,8 +10,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.foodapp.data.local.FavoriteEntity
+import com.example.foodapp.data.local.FoodJokeEntity
 import com.example.foodapp.data.local.RecipesEntity
 import com.example.foodapp.domain.repository.Repository
+import com.example.foodapp.models.dto.FoodJoke
 import com.example.foodapp.models.dto.FoodRecipe
 import com.example.foodapp.util.NetworkResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,8 +27,38 @@ class MainViewModel @Inject constructor(private val repository: Repository, appl
     /** ROOM DATABASE */
     var readRecipes: LiveData<List<RecipesEntity>> = repository.localDataSource.readRecipes().asLiveData()
     var readFavoriteRecipes: LiveData<List<FavoriteEntity>> = repository.localDataSource.readFavoriteRecipes().asLiveData()
+    var foodJokeResponse: MutableLiveData<NetworkResult<FoodJoke>> = MutableLiveData()
+    var readFoodJoke: LiveData<List<FoodJoke>> = repository.localDataSource.readFoodJoke().asLiveData()
+
+    fun getFoodJokes(apiKey: String) = viewModelScope.launch {
+        getFoodJokesSafeCall(apiKey)
+    }
+
+    private suspend fun getFoodJokesSafeCall(apiKey: String) {
+        foodJokeResponse.value = NetworkResult.Loading()
+        //اگر اینترنت کانکشن برقرار بود
+        if (hasInternetConnection()) {
+            try {
+                val response = repository.remoteDataSource.getFoodJokes(apiKey)
+                foodJokeResponse.value = handleFoodJokeResponse(response)
+                val foodJoke = foodJokeResponse.value!!.data
+                if (foodJoke != null) {
+                    offlineCacheFoodJoke(foodJoke)
+                }
+            } catch (e: Exception) {
+                foodJokeResponse.value = NetworkResult.Error("Recipes not found.")
+            }
+        } else {
+            foodJokeResponse.value = NetworkResult.Error("No Internet Connection.")
+        }
+    }
+
     fun insertRecipes(recipesEntity: RecipesEntity) = viewModelScope.launch {
         repository.localDataSource.insertRecipes(recipesEntity)
+    }
+
+    fun insertFoodJoke(foodJokeEntity: FoodJokeEntity) = viewModelScope.launch {
+        repository.localDataSource.insertFoodJoke(foodJokeEntity)
     }
 
     fun insertFavoriteRecipes(favoriteEntity: FavoriteEntity) = viewModelScope.launch {
@@ -105,6 +137,11 @@ class MainViewModel @Inject constructor(private val repository: Repository, appl
         insertRecipes(recipesEntity)
     }
 
+    private fun offlineCacheFoodJoke(foodJoke: FoodJoke) {
+        val foodJokeEntity = FoodJokeEntity(foodJoke)
+        insertFoodJoke(foodJokeEntity)
+    }
+
     /**
      *مدیریت کردن انواع ارور ها و بررسی جواب های مختلف خود ای پی آی (Response) رو بررسی می کنه
      */
@@ -130,6 +167,28 @@ class MainViewModel @Inject constructor(private val repository: Repository, appl
             //دز غیر این صورت، پیام خود ارور api رو نمایش بده
             else -> {
                 return NetworkResult.Error(response.message())
+            }
+        }
+    }
+
+    private fun handleFoodJokeResponse(response: Response<FoodJoke>): NetworkResult<FoodJoke>? {
+        return when {
+            //اگر در متن پیام (message) کلمه ی تایم اوت (timeout) وجود داشت، ارور NetworkResult مون رو تایم اوت قرار بده
+            response.message().toString().contains("timeout") -> {
+                NetworkResult.Error("Timeout")
+            }
+            //اگر پاسخمون از api کدش برابر با 402 شد، ارور NetworkResult مون رو محدودیت ای پی آی کی (API Key) قرار بده
+            response.code() == 402 -> {
+                NetworkResult.Error("API Key Limited.")
+            }
+            //اگر پاسخمون از api موفقیت آمیز بود، بدنه پاسخ را در NetworkResult.Success قرار بده
+            response.isSuccessful -> {
+                val foodJoke = response.body()
+                NetworkResult.Success(foodJoke!!)
+            }
+            //دز غیر این صورت، پیام خود ارور api رو نمایش بده
+            else -> {
+                NetworkResult.Error(response.message())
             }
         }
     }
