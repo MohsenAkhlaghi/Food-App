@@ -4,6 +4,7 @@ import android.view.ActionMode
 import android.view.LayoutInflater
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
@@ -14,11 +15,14 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.foodapp.R
 import com.example.foodapp.data.local.FavoriteEntity
 import com.example.foodapp.databinding.FavoriteRecipesRowLayoutBinding
+import com.example.foodapp.ui.MainViewModel
 import com.example.foodapp.ui.favorite.FavoriteRecipesFragmentDirections
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.snackbar.Snackbar
 
 class FavoriteRecipesAdapter(
-    private val requireActivity: FragmentActivity
+    private val requireActivity: FragmentActivity,
+    private val viewModelMain: MainViewModel,
 ) : RecyclerView.Adapter<FavoriteRecipesAdapter.MyViewHolder>(), ActionMode.Callback {
 
     private var favoriteRecipes = emptyList<FavoriteEntity>()
@@ -26,6 +30,7 @@ class FavoriteRecipesAdapter(
     private var myViewHolders = arrayListOf<MyViewHolder>()
     private var multiSelection = false
     private lateinit var mActionMode: ActionMode
+    private lateinit var rootView: View
 
     class MyViewHolder(private val binding: FavoriteRecipesRowLayoutBinding) :
         RecyclerView.ViewHolder(binding.root) {
@@ -51,6 +56,7 @@ class FavoriteRecipesAdapter(
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
         myViewHolders.add(holder)
+        rootView = holder.itemView.rootView
 
         val currentRecipe = favoriteRecipes[position]
         holder.bind(currentRecipe)
@@ -142,6 +148,15 @@ class FavoriteRecipesAdapter(
     }
 
     override fun onActionItemClicked(actionMode: ActionMode?, menu: MenuItem?): Boolean {
+        if (menu?.itemId == R.id.delete_favorite_recipe_menu) {
+            selectedRecipes.forEach {
+                viewModelMain.deleteFavoriteRecipe(it)
+            }
+            showSnackBar("${selectedRecipes.size} Recipe/s removed")
+            multiSelection = false
+            selectedRecipes.clear()
+            actionMode?.finish()
+        }
         return true
     }
 
@@ -156,6 +171,16 @@ class FavoriteRecipesAdapter(
 
     private fun applyStatusBarColor(color: Int) {
         requireActivity.window.statusBarColor = ContextCompat.getColor(requireActivity, color)
+    }
+
+    private fun showSnackBar(message: String) {
+        Snackbar.make(rootView, message, Snackbar.LENGTH_SHORT).setAction("Okay") {}.show()
+    }
+
+    fun clearContextualActionMode() {
+        if (this::mActionMode.isInitialized) {
+            mActionMode.finish()
+        }
     }
 
 }
