@@ -25,10 +25,12 @@
             android:name=".ui.DetailsActivity"
             android:configChanges="orientation|screenSize|screenLayout"
             android:label="Details"
+            android:screenOrientation="fullSensor"
             android:theme="@style/DetailsActivityStyle"
             android:exported="false" />
         <activity
             android:name=".ui.MainActivity"
+            android:screenOrientation="fullSensor"
             android:configChanges="orientation|screenSize|screenLayout"
             android:exported="true">
             <intent-filter>

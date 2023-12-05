@@ -34,8 +34,8 @@ class FoodJokeFragment : Fragment(R.layout.fragment_food_joke) {
             lifecycleOwner = viewLifecycleOwner
             viewModelMain = viewModelMain
             setHasOptionsMenu(true)
-            viewModelMain.getFoodJokes(API_KEY)
-            viewModelMain.foodJokeResponse.observe(viewLifecycleOwner) { response ->
+            viewModelMain!!.getFoodJokes(API_KEY)
+            viewModelMain!!.foodJokeResponse.observe(viewLifecycleOwner) { response ->
                 when (response) {
                     is NetworkResult.Success -> {
                         foodJokeTextView.text = response.data?.text
