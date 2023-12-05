@@ -5,7 +5,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
-import com.example.foodapp.models.dto.FoodJoke
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -46,7 +45,7 @@ interface RecipesDao {
      * صدا کردن و خواندن جُک از دیتابیس
      */
     @Query("SELECT * FROM food_joke_table ORDER BY id ASC")
-    fun readFoodJoke(): Flow<List<FoodJoke>>
+    fun readFoodJoke(): Flow<List<FoodJokeEntity>>
 
     /**
      * حذف یک موادغذایی مورد علاقه از دیتابیس
