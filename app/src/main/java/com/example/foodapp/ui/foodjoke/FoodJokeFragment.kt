@@ -46,11 +46,11 @@ class FoodJokeFragment : Fragment(R.layout.fragment_food_joke) {
         }
     }
 
-    fun loadDataFromCache() {
+    private fun loadDataFromCache() {
         lifecycleScope.launch {
             viewModelMain.readFoodJoke.observe(viewLifecycleOwner) { database ->
-                if (database.isNotEmpty() && database != null) {
-                    binding.foodJokeTextView.text = database[0].text
+                if (database.isNullOrEmpty()) {
+                    binding.foodJokeTextView.text = database.first().text
                 }
             }
         }
