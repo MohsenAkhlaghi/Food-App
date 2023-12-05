@@ -4,7 +4,6 @@ import com.example.foodapp.data.local.FavoriteEntity
 import com.example.foodapp.data.local.FoodJokeEntity
 import com.example.foodapp.data.local.RecipesDao
 import com.example.foodapp.data.local.RecipesEntity
-import com.example.foodapp.models.dto.FoodJoke
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
@@ -49,7 +48,7 @@ class LocalDataSource @Inject constructor(private val recipesDao: RecipesDao) {
     /**
      * صدا کردن و خواندن جُک از دیتابیس
      */
-    fun readFoodJoke(): Flow<List<FoodJoke>> {
+    fun readFoodJoke(): Flow<List<FoodJokeEntity>> {
         return recipesDao.readFoodJoke()
     }
 
