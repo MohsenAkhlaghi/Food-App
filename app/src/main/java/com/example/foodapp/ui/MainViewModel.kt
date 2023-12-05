@@ -28,7 +28,7 @@ class MainViewModel @Inject constructor(private val repository: Repository, appl
     var readRecipes: LiveData<List<RecipesEntity>> = repository.localDataSource.readRecipes().asLiveData()
     var readFavoriteRecipes: LiveData<List<FavoriteEntity>> = repository.localDataSource.readFavoriteRecipes().asLiveData()
     var foodJokeResponse: MutableLiveData<NetworkResult<FoodJoke>> = MutableLiveData()
-    var readFoodJoke: LiveData<List<FoodJoke>> = repository.localDataSource.readFoodJoke().asLiveData()
+    var readFoodJoke: LiveData<List<FoodJokeEntity>> = repository.localDataSource.readFoodJoke().asLiveData()
 
     fun getFoodJokes(apiKey: String) = viewModelScope.launch {
         getFoodJokesSafeCall(apiKey)
