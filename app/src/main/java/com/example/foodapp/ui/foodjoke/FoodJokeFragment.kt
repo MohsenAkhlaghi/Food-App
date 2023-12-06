@@ -24,18 +24,18 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class FoodJokeFragment : Fragment(R.layout.fragment_food_joke) {
     private lateinit var binding: FragmentFoodJokeBinding
-    private val viewModelMain: MainViewModel by viewModels()
+    private val mainViewModel: MainViewModel by viewModels()
     private var foodJoke = "No Food Joke"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = DataBindingUtil.bind(view)!!
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.viewModelMain = mainViewModel
         with(binding) {
-            lifecycleOwner = viewLifecycleOwner
-            viewModelMain = viewModelMain
             setHasOptionsMenu(true)
-            viewModelMain!!.getFoodJokes(API_KEY)
-            viewModelMain!!.foodJokeResponse.observe(viewLifecycleOwner) { response ->
+            mainViewModel.getFoodJokes(API_KEY)
+            mainViewModel.foodJokeResponse.observe(viewLifecycleOwner) { response ->
                 when (response) {
                     is NetworkResult.Success -> {
                         foodJokeTextView.text = response.data?.text
@@ -76,7 +76,7 @@ class FoodJokeFragment : Fragment(R.layout.fragment_food_joke) {
 
     private fun loadDataFromCache() {
         lifecycleScope.launch {
-            viewModelMain.readFoodJoke.observe(viewLifecycleOwner) { database ->
+            mainViewModel.readFoodJoke.observe(viewLifecycleOwner) { database ->
                 if (!database.isNullOrEmpty()) {
                     binding.foodJokeTextView.text = database.first().foodJoke.text
                     foodJoke = database.first().foodJoke.text
