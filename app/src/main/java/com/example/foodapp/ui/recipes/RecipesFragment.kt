@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -30,33 +31,23 @@ import kotlinx.coroutines.launch
 @AndroidEntryPoint
 class RecipesFragment : Fragment(R.layout.fragment_recipes), SearchView.OnQueryTextListener {
     private lateinit var binding: FragmentRecipesBinding
-    private lateinit var viewModelMain: MainViewModel
-    private lateinit var viewModelRecipes: RecipesViewModel
+    private val viewModelMain: MainViewModel by viewModels()
+    private val viewModelRecipes: RecipesViewModel by viewModels()
     private val mAdapter by lazy { RecipesAdapter() }
     private val args by navArgs<RecipesFragmentArgs>()
-
     //NETWORK LISTENER (2)
     private lateinit var networkListener: NetworkListener
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        viewModelMain = ViewModelProvider(requireActivity())[MainViewModel::class.java]
-        viewModelRecipes = ViewModelProvider(requireActivity())[RecipesViewModel::class.java]
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = DataBindingUtil.bind(view)!!
         binding.lifecycleOwner = viewLifecycleOwner
         binding.viewModel = viewModelMain
-
         setHasOptionsMenu(true)
         setupRecyclerView()
         //NETWORK LISTENER (15)
         viewModelRecipes.readBackOnline.observe(viewLifecycleOwner) {
             viewModelRecipes.backOnline = it
         }
-
 
         //NETWORK LISTENER (3)
         lifecycleScope.launch {
@@ -102,19 +93,23 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes), SearchView.OnQueryT
 
     private fun readDatabase() {
         lifecycleScope.launch {
-            viewModelMain.readRecipes.observeOnce(viewLifecycleOwner) { database ->
-                if (database.isNotEmpty() && !args.backFromBottomSheet) {
-                    mAdapter.setData(database[0].foodRecipe)
-                    hideProgress()
-                } else {
-                    requestApiData()
+            try {
+                viewModelMain.readRecipes.observeOnce(viewLifecycleOwner) { database ->
+                    if (database.isNotEmpty() && !args.backFromBottomSheet) {
+                        mAdapter.setData(database.first().foodRecipe)
+                        hideProgress()
+                    } else {
+                        requestApiData()
+                    }
                 }
+            } catch (e: Exception) {
+                Toast.makeText(requireContext(), R.string.no_internet_connection, Toast.LENGTH_SHORT).show()
+                Log.e("RecipesFragment", "readDatabase: Error = ${e.message.toString()}")
             }
         }
     }
 
     private fun requestApiData() {
-        Log.e(TAG, "requestApiData: ")
         viewModelMain.getRecipes(viewModelRecipes.applyQueries())
         viewModelMain.recipesResponse.observe(viewLifecycleOwner) { response ->
             when (response) {
@@ -168,7 +163,7 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes), SearchView.OnQueryT
         lifecycleScope.launch {
             viewModelMain.readRecipes.observe(viewLifecycleOwner) { database ->
                 if (database.isNullOrEmpty()) {
-                    mAdapter.setData(database[0].foodRecipe)
+                    mAdapter.setData(database.first().foodRecipe)
                 }
             }
         }
