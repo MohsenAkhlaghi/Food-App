@@ -119,20 +119,17 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes), SearchView.OnQueryT
         viewModelMain.recipesResponse.observe(viewLifecycleOwner) { response ->
             when (response) {
                 is NetworkResult.Success -> {
-//                    hideShimmerEffect()
                     hideProgress()
                     response.data?.let { mAdapter.setData(it) }
                 }
 
                 is NetworkResult.Error -> {
-//                    hideShimmerEffect()
                     hideProgress()
                     loadDataFromCache()
                     Toast.makeText(requireContext(), response.message.toString(), Toast.LENGTH_SHORT).show()
                 }
 
                 is NetworkResult.Loading -> {
-//                    showShimmerEffect()
                     showProgress()
                 }
             }
@@ -140,7 +137,7 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes), SearchView.OnQueryT
     }
 
     private fun searchApiData(searchQuery: String) {
-        showProgress()
+        hideProgress()
         viewModelMain.searchRecipes(viewModelRecipes.applySearchQuery(searchQuery))
         viewModelMain.searchRecipesResponse.observe(viewLifecycleOwner) { response ->
             when (response) {
@@ -180,7 +177,6 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes), SearchView.OnQueryT
     private fun setupRecyclerView() {
         binding.recyclerview.adapter = mAdapter
         binding.recyclerview.layoutManager = LinearLayoutManager(requireContext())
-//        showShimmerEffect()
         showProgress()
     }
 
@@ -191,13 +187,4 @@ class RecipesFragment : Fragment(R.layout.fragment_recipes), SearchView.OnQueryT
     private fun hideProgress() {
         binding.progressBar.visibility = View.GONE
     }
-
-    /*private fun showShimmerEffect() {
-        binding.recyclerview.showShimmer()
-    }*/
-
-    /*private fun hideShimmerEffect() {
-        binding.recyclerview.hideShimmer()
-    }*/
-
 }
