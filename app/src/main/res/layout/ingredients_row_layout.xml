@@ -22,20 +22,21 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:strokeColor="@color/strokeColor"
+            app:strokeColor="@color/stroke_color"
             app:strokeWidth="1dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/ingredient_background"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/cardBackgroundColor"
+                android:background="@color/card_background_color"
                 android:elevation="2dp">
 
                 <View
                     android:id="@+id/white_background"
                     android:layout_width="120dp"
                     android:layout_height="0dp"
+                    android:background="@color/white"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -59,7 +60,7 @@
                     android:layout_marginEnd="12dp"
                     android:fontFamily="@font/courgette"
                     android:text="Name"
-                    android:textColor="@color/titleColor"
+                    android:textColor="@color/title_color"
                     android:textSize="20sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"

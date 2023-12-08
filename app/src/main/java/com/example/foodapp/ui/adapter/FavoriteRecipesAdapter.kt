@@ -92,7 +92,7 @@ class FavoriteRecipesAdapter(
     private fun applySelection(holder: MyViewHolder, currentRecipes: FavoriteEntity) {
         if (selectedRecipes.contains(currentRecipes)) {
             selectedRecipes.remove(currentRecipes)
-            changeRecipesStyle(holder, R.color.card_background_color, R.color.strokeColor)
+            changeRecipesStyle(holder, R.color.card_background_color, R.color.stroke_color)
             applyActionModeTitle()
         } else {
             selectedRecipes.add(currentRecipes)
@@ -163,7 +163,7 @@ class FavoriteRecipesAdapter(
 
     override fun onDestroyActionMode(actionMode: ActionMode?) {
         myViewHolders.forEach { holder ->
-            changeRecipesStyle(holder, R.color.card_background_color, R.color.strokeColor)
+            changeRecipesStyle(holder, R.color.card_background_color, R.color.stroke_color)
         }
         multiSelection = false
         selectedRecipes.clear()
