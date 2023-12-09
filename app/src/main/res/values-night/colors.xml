@@ -42,5 +42,6 @@
     <color name="bottomNavBackground">@color/darker</color>
     <color name="bottomNavItemColor">@color/medium_gray</color>
     <color name="bottomNavCheckedItemColor">@color/colorAccent</color>
-
+    <!--  Button Background TintColor  -->
+    <color name="buttonBackgroundTintColor">@color/darker</color>
 </resources>
