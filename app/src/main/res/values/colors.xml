@@ -34,7 +34,7 @@
     <color name="title_color">@color/darker</color>
     <color name="description_color">@color/dark_gray</color>
 
-    <color name="status_bar_color">@color/status_bar_color</color>
+    <color name="status_bar_color">@color/colorPrimaryDark</color>
     <color name="contextual_status_bar_color">@color/darker</color>
     <color name="actionBarBackgroundColor">@color/color_primary</color>
     <color name="contextual_action_bar_color">@color/dark</color>
