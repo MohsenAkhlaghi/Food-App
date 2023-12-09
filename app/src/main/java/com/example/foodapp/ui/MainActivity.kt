@@ -18,6 +18,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setTheme(R.style.Theme_FoodApp)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         setBottomNavigation()
 
@@ -41,7 +42,7 @@ class MainActivity : AppCompatActivity() {
         )
         binding.bottomNavigationView.setupWithNavController(navController)
         //اسم فرگمنت هارو در اکشن بار می نویسه
-        setupActionBarWithNavController(navController,appBarConfiguration)
+        setupActionBarWithNavController(navController, appBarConfiguration)
     }
 
 }

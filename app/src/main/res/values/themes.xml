@@ -57,5 +57,11 @@
         <item name="background">@color/actionBarBackgroundColor</item>
     </style>
 
+    <!--  Splash Screen Style  -->
+    <style name="splashScreenStyle" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+        <item name="android:windowTranslucentStatus">true</item>
+        <item name="android:windowTranslucentNavigation">true</item>
+    </style>
 
 </resources>
